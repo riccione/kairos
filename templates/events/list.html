@@ -3,7 +3,7 @@
 {% block content %}
 {% for x in events %}
     <p>    
-        {{x.name}}
+    <a href="{% url 'events:event_detail' x.pk %}">{{x.name}}</a>
     </p>
 {% endfor %}
 {% endblock %}

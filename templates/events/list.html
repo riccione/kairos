@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for x in events %}
+    <p>    
+        {{x.name}}
+    </p>
+{% endfor %}
+{% endblock %}

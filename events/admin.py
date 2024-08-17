@@ -4,4 +4,7 @@ from .models import User, Event
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Event)
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_filter = ('status', 'created', 'creator', 'event_date')

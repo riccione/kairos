@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views import generic
 from .models import Event
+from .forms import EventModelForm
 
 
 class LandingPageView(generic.TemplateView):
@@ -20,3 +21,12 @@ class EventDetailView(generic.DetailView):
     model = Event
     context_object_name = 'events'
     template_name = 'events/detail.html'
+
+class EventCreateView(generic.CreateView):
+    form_class = EventModelForm
+    success_url = 'events/'
+    template_name = 'events/create.html'
+
+    def form_valid(self, form):
+        event = form.save()
+        return super(EventCreateView, self).form_valid(form)

@@ -12,7 +12,7 @@ class Event(models.Model):
         ('published', 'Published'),
     )
     name = models.CharField(max_length=250)
-    descrption = models.TextField()
+    description = models.TextField()
     creator = models.ForeignKey(User,
                                 on_delete=models.CASCADE,
                                 related_name='event')

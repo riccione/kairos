@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.views import View
 from django.views import generic
+from django.urls import reverse_lazy
 from .models import Event
 from .forms import EventModelForm
 
@@ -24,9 +25,20 @@ class EventDetailView(generic.DetailView):
 
 class EventCreateView(generic.CreateView):
     form_class = EventModelForm
-    success_url = 'events/'
     template_name = 'events/create.html'
+
+    def get_success_url(self):
+        return reverse('events:event_list')
 
     def form_valid(self, form):
         event = form.save()
         return super(EventCreateView, self).form_valid(form)
+
+class EventUpdateView(generic.UpdateView):
+    form_class = EventModelForm
+    queryset = Event.objects.all()
+    template_name = 'events/update.html'
+    success_url = reverse_lazy('events:event_list')
+
+    #  def get_success_url(self):
+    #      return reverse('events:event_list')

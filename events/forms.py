@@ -8,6 +8,7 @@ class EventModelForm(forms.ModelForm):
         fields = (
             'name',
             'description',
+            'creator',
             'event_date',
             'status',
         )

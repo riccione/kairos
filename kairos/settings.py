@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'crispy_forms',
+    'crispy_bulma',
+
     'events',
 ]
 
@@ -125,3 +128,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'events.User'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bulma',)
+CRISPY_TEMPLATE_PACK = 'bulma'

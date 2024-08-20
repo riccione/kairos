@@ -4,6 +4,7 @@ from .views import (
         EventDetailView,
         EventCreateView,
         EventUpdateView,
+        EventDeleteView,
         )
 
 app_name = 'events'
@@ -13,4 +14,5 @@ urlpatterns = [
     path('<int:pk>/', EventDetailView.as_view(), name='event_detail'),
     path('create/', EventCreateView.as_view(), name='event_create'),
     path('<int:pk>/update/', EventUpdateView.as_view(), name='event_update'),
+    path('<int:pk>/delete/', EventDeleteView.as_view(), name='event_delete'),
 ]

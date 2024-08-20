@@ -40,5 +40,7 @@ class EventUpdateView(generic.UpdateView):
     template_name = 'events/update.html'
     success_url = reverse_lazy('events:event_list')
 
-    #  def get_success_url(self):
-    #      return reverse('events:event_list')
+class EventDeleteView(generic.DeleteView):
+    queryset = Event.objects.all()
+    success_url = reverse_lazy('events:event_list')
+    template_name = 'events/delete.html'

@@ -3,11 +3,16 @@ from django.views import View
 from django.views import generic
 from django.urls import reverse_lazy
 from .models import Event
-from .forms import EventModelForm
+from .forms import EventModelForm, CustomUserCreationForm
 
 
 class LandingPageView(generic.TemplateView):
     template_name = 'events/landing.html'
+
+class SignupView(generic.CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
 
 class EventListView(generic.ListView):
     queryset = Event.objects.all()

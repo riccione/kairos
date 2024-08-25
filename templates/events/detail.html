@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Name: {{ events.name }}</h1>
+    <h1>Name: {{ event.name }}</h1>
+    {% if request.user == event.creator %}
+    <a href="{% url 'events:event_update' event.pk %}" class="button is-dark">
+        Update Event
+    </a>
+    {% endif %}
 {% endblock %}

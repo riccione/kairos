@@ -9,24 +9,23 @@ from django.contrib.auth.forms import (
 
 User = get_user_model()
 
+
 class EventModelForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = (
-            'name',
-            'description',
-            'creator',
-            'event_date',
-            'status',
+            "name",
+            "description",
+            "event_date",
+            "status",
         )
         widgets = {
-            'event_date': forms.widgets.DateInput(attrs={'type': 'datetime-local'})
+            "event_date": forms.widgets.DateInput(attrs={"type": "datetime-local"})
         }
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = (
-            'username',
-        )
-        field_classes = {'username': UsernameField}
+        fields = ("username",)
+        field_classes = {"username": UsernameField}

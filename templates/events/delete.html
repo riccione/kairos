@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Do you really want to delete the event <strong>{{ event.name }}</strong>?</h1>
+    <form method='POST'>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type='submit' class='button is-dark'>Delete</button>
+    </form>
+{% endblock %}
+

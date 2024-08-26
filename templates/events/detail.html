@@ -1,10 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Name: {{ event.name }}</h1>
+    <table class="table">
+        <tr>
+            <td>Name</td>
+            <td>{{ event.name }}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ event.description }}</td>
+        </tr>
+        <tr>
+            <td>Event date</td>
+            <td>{{ event.event_date }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ event.status }}</td>
+        </tr>
+    </table>
     {% if request.user == event.creator %}
     <a href="{% url 'events:event_update' event.pk %}" class="button is-dark">
         Update Event
+    </a>
+    <a href="{% url 'events:event_delete' event.pk %}" class="button is-dark">
+        Delete
     </a>
     {% endif %}
 {% endblock %}

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>LandingPage</h1>
     {% if request.user.is_authenticated %}
         <h1>Dashboard</h1>
+    {% else %}
+        <h1>LandingPage</h1>
     {% endif %}
 {% endblock %}

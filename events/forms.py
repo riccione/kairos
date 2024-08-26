@@ -25,6 +25,8 @@ class EventModelForm(forms.ModelForm):
 
 
 class CustomUserCreationForm(UserCreationForm):
+    usable_password = None
+
     class Meta:
         model = User
         fields = ("username",)

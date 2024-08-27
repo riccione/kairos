@@ -1,0 +1,26 @@
+<nav class="pagination" role='navigation' aria-label='pagination'>
+    <ul class="pagination-list">
+    {% if page.has_previous %}
+        <li>
+            <a class='pagination-link' 
+                href="?page={{ page.previous_page_number }}">Previous</a>
+        </li>
+    {% endif %}
+        <li>
+            <a class='pagination-link is-current' 
+               href="?page={{ page.number }}">{{ page.number }}</a>
+        </li>
+    {% if page.has_next %}
+        <li>
+            <a class='pagination-link' 
+               href="?page={{ page.paginator.num_pages }}">
+                {{ page.paginator.num_pages }}
+            </a>
+        </li>
+        <li>
+            <a class='pagination-link' 
+                href="?page={{ page.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>

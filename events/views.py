@@ -32,7 +32,7 @@ class EventListView(generic.ListView):
             queryset = Event.objects.filter(
                 status__exact="published",
                 creator=user,
-            )
+            ).order_by('event_date')
         else:  # all
             queryset = Event.objects.all()
         return queryset

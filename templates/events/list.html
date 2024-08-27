@@ -33,6 +33,9 @@
     {{x.name}}
   </a>
 {% endfor %}
+    <div class='panel-block'>
+        {% include 'pagination.html' with page=page_obj %}
+    </div>
   <div class="panel-block">
     <a href="{% url 'events:event_create' %}" class="button is-dark">
         Create a new Event

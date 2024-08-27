@@ -9,10 +9,25 @@ from django.contrib.auth.forms import (
 
 User = get_user_model()
 
+class DateTimeLocalInput(forms.DateTimeInput):
+    input_type = "datetime-local"
+
+class DateTimeLocalField(forms.DateTimeField):
+    # Set DATETIME_INPUT_FORMATS here because, if USE_L10N 
+    # is True, the locale-dictated format will be applied 
+    # instead of settings.DATETIME_INPUT_FORMATS.
+
+    input_formats = [
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M"
+    ]
+    widget = DateTimeLocalInput(format="%Y-%m-%dT%H:%M")
 
 class EventModelForm(forms.ModelForm):
     class Meta:
         model = Event
+        event_date = DateTimeLocalField()
         fields = (
             "name",
             "description",
@@ -20,7 +35,9 @@ class EventModelForm(forms.ModelForm):
             "status",
         )
         widgets = {
-            "event_date": forms.widgets.DateInput(attrs={"type": "datetime-local"})
+                'event_date': DateTimeLocalInput(
+                format='%Y-%m-%dT%H:%M'
+                )
         }
 
 

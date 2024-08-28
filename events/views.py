@@ -48,6 +48,10 @@ class EventDetailView(generic.DetailView):
     context_object_name = "event"
     template_name = "events/detail.html"
 
+class EventPublicDetailView(generic.DetailView):
+    model = Event
+    context_object_name = "event"
+    template_name = "events/detail.html"
 
 class EventCreateView(generic.CreateView):
     form_class = EventModelForm

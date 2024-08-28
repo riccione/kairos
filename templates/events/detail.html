@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if request.user.is_authenticated %}
     <table class="table">
         <tr>
             <td>Name</td>
@@ -19,6 +20,22 @@
             <td>{{ event.status }}</td>
         </tr>
     </table>
+    {% else %}
+    <table class="table">
+        <tr>
+            <td>Name</td>
+            <td>{{ event.name }}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ event.description }}</td>
+        </tr>
+        <tr>
+            <td>Event date</td>
+            <td>{{ event.event_date }}</td>
+        </tr>
+    </table>
+    {% endif %}
     {% if request.user == event.creator %}
     <a href="{% url 'events:event_update' event.pk %}" class="button is-dark">
         Update Event

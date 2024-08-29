@@ -3,11 +3,10 @@ from django.views import generic
 from django.urls import reverse_lazy
 from .models import Event
 from .forms import EventModelForm, CustomUserCreationForm
-
+from django.conf import settings
 
 class LandingPageView(generic.TemplateView):
     template_name = "events/landing.html"
-
 
 class SignupView(generic.CreateView):
     form_class = CustomUserCreationForm
@@ -17,7 +16,7 @@ class SignupView(generic.CreateView):
 
 class EventListView(generic.ListView):
     context_object_name = "events"
-    paginate_by = 3
+    paginate_by = settings.PAGINATION
     template_name = "events/list.html"
 
     def get_queryset(self):
@@ -34,7 +33,9 @@ class EventListView(generic.ListView):
                 creator=user,
             ).order_by('event_date')
         else:  # all
-            queryset = Event.objects.all()
+            queryset = Event.objects.filter(
+                status__exact='published',
+            ).order_by('event_date')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -42,6 +43,13 @@ class EventListView(generic.ListView):
         context["filter"] = self.kwargs.get("filter", "published")
         return context
 
+class EventPublicListView(generic.ListView):
+    context_object_name = "events"
+    paginate_by = settings.PAGINATION
+    queryset = Event.objects.filter(
+                status__exact="published",
+            ).order_by('event_date')
+    template_name = "events/public_list.html"
 
 class EventDetailView(generic.DetailView):
     model = Event

@@ -31,11 +31,11 @@ class EventListView(generic.ListView):
             queryset = Event.objects.filter(
                 status__exact="published",
                 creator=user,
-            ).order_by('event_date')
+            )
         else:  # all
             queryset = Event.objects.filter(
                 status__exact='published',
-            ).order_by('event_date')
+            )
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -48,7 +48,7 @@ class EventPublicListView(generic.ListView):
     paginate_by = settings.PAGINATION
     queryset = Event.objects.filter(
                 status__exact="published",
-            ).order_by('event_date')
+            )
     template_name = "events/public_list.html"
 
 class EventDetailView(generic.DetailView):

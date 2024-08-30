@@ -32,7 +32,9 @@ class EventModelForm(forms.ModelForm):
             "name",
             "description",
             "event_date",
+            "periodicity",
             "status",
+            "capacity",
         )
         widgets = {
                 'event_date': DateTimeLocalInput(

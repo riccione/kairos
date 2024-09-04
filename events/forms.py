@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event
+from .models import Event, Ticket
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm,

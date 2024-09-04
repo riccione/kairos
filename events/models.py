@@ -42,10 +42,11 @@ class Ticket(models.Model):
     event = models.ForeignKey(Event,
                               on_delete=models.CASCADE,
                               related_name="ticket")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     code = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)
-    used = models.DateTimeField()
+    used = models.DateTimeField(blank=True, null=True)
     active = models.BooleanField()
 
-    def __str__(str):
-        return self.active
+    def __str__(self):
+        return self.code

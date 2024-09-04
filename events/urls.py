@@ -8,6 +8,7 @@ from .views import (
     EventDeleteView,
     EventPublicListView,
     EventPublicDetailView,
+    AttendView,
 )
 
 app_name = "events"
@@ -22,5 +23,6 @@ urlpatterns = [
          name="event_public_detail"),
     path("<int:pk>/update/", EventUpdateView.as_view(), name="event_update"),
     path("<int:pk>/delete/", EventDeleteView.as_view(), name="event_delete"),
+    path("attend/", AttendView.as_view(), name="attend"),
     path("<str:filter>/", EventListView.as_view(), name="event_list_filtered"),
 ]

@@ -1,9 +1,11 @@
 from django.shortcuts import reverse
 from django.views import generic
 from django.urls import reverse_lazy
-from .models import Event
+from .models import Event, Ticket
 from .forms import EventModelForm, CustomUserCreationForm
 from django.conf import settings
+import hashlib
+from django.http import HttpResponseRedirect
 
 class LandingPageView(generic.TemplateView):
     template_name = "events/landing.html"
@@ -56,6 +58,48 @@ class EventDetailView(generic.DetailView):
     context_object_name = "event"
     template_name = "events/detail.html"
 
+    def post(self, request, *args, **kwargs):
+        event = self.get_object()
+
+        # event = request.POST.get(id)
+        user = self.request.user
+        code = 'just a code'
+        active = True
+
+        if Ticket.objects.filter(
+            event=event,
+            user=self.request.user,
+            ).exists():
+            messages.error(request,
+                           "You have already attended to the event")
+            return HttpResponseRedirect(reverse_lazy('events:event_detail',
+                                        kwargs={'pk': event.pk}))
+
+        Ticket.objects.create(
+            event = event,
+            user = user,
+            code = code,
+            active = active,
+        )
+
+        return HttpResponseRedirect(reverse_lazy('events:event_detail',
+                                    kwargs={'pk': event.pk}))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.object
+        h = hashlib.new('sha3_256')
+        crc = f"{event.id}_{event.event_date}_{settings.SECRET_KEY}"
+        h.update(crc.encode('utf-8'))
+        crc = h.hexdigest()
+        context['crc'] = crc
+        ticket = Ticket.objects.filter(
+            user=self.request.user,
+            event = self.get_object()
+        ).last()
+        context['ticket'] = ticket
+        return context
+
 class EventPublicDetailView(generic.DetailView):
     model = Event
     context_object_name = "event"
@@ -86,3 +130,15 @@ class EventDeleteView(generic.DeleteView):
     queryset = Event.objects.all()
     success_url = reverse_lazy("events:event_list")
     template_name = "events/delete.html"
+
+class AttendView(generic.TemplateView):
+    template_name = 'events/attend.html'
+    success_url = reverse_lazy("events:event_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        code = "sha3 with hashlib over name of the event and event_date"
+        context["code"] = code
+
+        ticket = Ticket(code=code)
+        return context

@@ -51,5 +51,19 @@
     <a href="{% url 'events:event_delete' event.pk %}" class="button is-dark">
         Delete
     </a>
+    {% else %}
+        Ticket: {{ ticket }}
+        {% if not ticket.active %}
+        <form method='POST'>
+            {% csrf_token %}
+            <input type='hidden' id='id' name="id" value='{{event.id}}' \>
+            <input type='hidden' id='event_date' name="event_date"
+                                                 value="{{event.event_date}}" \>
+            <input type='hidden' id='crc' name="crc" value='{{crc}}' \>
+            <button type='submit' class='button is-dark'>Attend</button>
+        </form>
+        {% else %}
+            You already have a ticket
+        {% endif%}
     {% endif %}
 {% endblock %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'crispy_bulma',
+    'qr_code',
 
     'events',
 ]

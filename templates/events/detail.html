@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load qr_code %}
 
 {% block content %}
     {% if request.user.is_authenticated %}
@@ -63,6 +64,7 @@
             <button type='submit' class='button is-dark'>Attend</button>
         </form>
         {% else %}
+            {% qr_from_text ticket size="T" image_format="png" error_correction="M" %}
             You already have a ticket
         {% endif%}
     {% endif %}

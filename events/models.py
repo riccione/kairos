@@ -27,9 +27,9 @@ class Event(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
-    periodicity = models.CharField(max_length=20,
-                                   choices=PERIODICITY_CHOICES,
-                                   default="none")
+    periodicity = models.CharField(
+        max_length=20, choices=PERIODICITY_CHOICES, default="none"
+    )
     capacity = models.IntegerField(default=50)
 
     class Meta:
@@ -38,10 +38,9 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+
 class Ticket(models.Model):
-    event = models.ForeignKey(Event,
-                              on_delete=models.CASCADE,
-                              related_name="ticket")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="ticket")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     code = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)

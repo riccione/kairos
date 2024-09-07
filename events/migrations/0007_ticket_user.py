@@ -6,16 +6,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('events', '0006_alter_event_capacity'),
+        ("events", "0006_alter_event_capacity"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ticket',
-            name='user',
-            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, related_name='user', to=settings.AUTH_USER_MODEL),
+            model_name="ticket",
+            name="user",
+            field=models.ForeignKey(
+                default=2,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user",
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
     ]

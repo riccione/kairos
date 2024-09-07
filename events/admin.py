@@ -10,4 +10,5 @@ admin.site.register(User, UserAdmin)
 class EventAdmin(admin.ModelAdmin):
     list_filter = ("status", "created", "creator", "event_date")
 
+
 admin.site.register(Ticket)

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load qr_code %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+    <table class="table">
+        <tr>
+            <td>Name</td>
+            <td>{{ ticket.event.name }}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ ticket.event.description }}</td>
+        </tr>
+        <tr>
+            <td>Event date</td>
+            <td>{{ ticket.event.event_date }}</td>
+        </tr>
+        <tr>
+            <td>Periodicity</td>
+            <td>{{ ticket.event.periodicity }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ ticket.event.status }}</td>
+        </tr>
+        <tr>
+            <td>Capacity</td>
+            <td>{{ ticket.event.capacity }}</td>
+        </tr>
+    </table>
+    {% endif %}
+        <div class="block">
+        Your ticket is:
+        </div>
+        <div>
+        {% qr_from_text ticket size="T" image_format="png" error_correction="M" %}
+        </div>
+{% endblock %}

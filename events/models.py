@@ -31,6 +31,8 @@ class Event(models.Model):
         max_length=20, choices=PERIODICITY_CHOICES, default="none"
     )
     capacity = models.IntegerField(default=50)
+    capacity_actual = models.IntegerField(default=0)
+    capacity_updated = models.BooleanField(default=False)
 
     class Meta:
         ordering = ("event_date",)

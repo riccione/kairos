@@ -6,6 +6,7 @@ from .forms import EventModelForm, CustomUserCreationForm
 from django.conf import settings
 import hashlib
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 
 class LandingPageView(generic.TemplateView):
@@ -64,17 +65,21 @@ class EventDetailView(generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         event = self.get_object()
-
-        # event = request.POST.get(id)
         user = self.request.user
-        code = "just a code"
+
+        h = hashlib.new("sha3_256")
+        code = f"{event.id}_{user}_{settings.SECRET_KEY}"
+        h.update(code.encode("utf-8"))
+        code = h.hexdigest()
         active = True
 
         if Ticket.objects.filter(
             event=event,
             user=self.request.user,
         ).exists():
-            messages.error(request, "You have already attended to the event")
+            messages.error(
+                    self.request,
+                    "You have already attended to the event")
             return HttpResponseRedirect(
                 reverse_lazy("events:event_detail", kwargs={"pk": event.pk})
             )
@@ -86,6 +91,13 @@ class EventDetailView(generic.DetailView):
             active=active,
         )
 
+        # get current capacity
+        capacity_actual = event.capacity_actual + 1
+
+        event.capacity_actual = capacity_actual
+        event.capacity_updated = True
+        event.save()
+
         return HttpResponseRedirect(
             reverse_lazy("events:event_detail", kwargs={"pk": event.pk})
         )
@@ -94,7 +106,7 @@ class EventDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         event = self.object
         h = hashlib.new("sha3_256")
-        crc = f"{event.id}_{event.event_date}_{settings.SECRET_KEY}"
+        crc = f"{event.id}_{settings.SECRET_KEY}"
         h.update(crc.encode("utf-8"))
         crc = h.hexdigest()
         context["crc"] = crc
@@ -121,6 +133,7 @@ class EventCreateView(generic.CreateView):
     def form_valid(self, form):
         event = form.save(commit=False)
         event.creator = self.request.user
+        # event.capacity_actual = 0
         event.save()
         return super(EventCreateView, self).form_valid(form)
 
@@ -131,8 +144,44 @@ class EventUpdateView(generic.UpdateView):
     template_name = "events/update.html"
     success_url = reverse_lazy("events:event_list")
 
+    def form_valid(self, form):
+        event = form.save(commit=False)
+        new_capacity = form.cleaned_data.get('capacity')
+        print(event.capacity_updated, event.capacity_actual, new_capacity)
+        if event.capacity_updated and event.capacity_actual > new_capacity:
+            print(event.capacity_updated, event.capacity_actual, new_capacity)
+            messages.error(
+                    self.request,
+                    "You can't change capacity below the actual capacity")
+            return self.form_invalid(form)
+        else:
+            event.save()
+            messages.success(
+                    self.request,
+                    "Event has been updated successfully")
+        return super(EventUpdateView, self).form_valid(form)
+
 
 class EventDeleteView(generic.DeleteView):
     queryset = Event.objects.all()
     success_url = reverse_lazy("events:event_list")
     template_name = "events/delete.html"
+
+
+class TicketListView(generic.ListView):
+    context_object_name = "tickets"
+    paginate_by = settings.PAGINATION
+    template_name = "events/ticket_list.html"
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Ticket.objects.filter(
+            user=self.request.user
+        )
+        return queryset
+
+
+class TicketDetailView(generic.DetailView):
+    model = Ticket
+    context_object_name = "ticket"
+    template_name = "events/ticket_detail.html"

@@ -1,3 +1,4 @@
+{% load forms %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 </head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="notification is-{{ message.level_tag|bulma_message_tag }}">
+                <button class='delete'></button>
+                {{ message|safe }}
+            </div>
+            {% endfor %}
+    {% endif %}
     {% include 'navbar.html' %}
     <section class="section">
         <div class="container">

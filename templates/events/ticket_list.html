@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="panel">
+  <p class="panel-heading">Tickets</p>
+  <div class="panel-block">
+    <p class="control has-icons-left">
+      <input class="input" type="text" placeholder="Search" />
+      <span class="icon is-left">
+        <i class="fas fa-search" aria-hidden="true"></i>
+      </span>
+    </p>
+  </div>
+  <p class="panel-tabs">
+    <a class="{% if filter == 'published' %}is-active{% endif %}" 
+        href="{% url 'events:event_list_filtered' 'published' %}">
+        Published
+    </a>
+    <a class="{% if filter == 'draft' %}is-active{% endif %}" 
+        href="{% url 'events:event_list_filtered' 'draft' %}">
+        Draft
+    </a>
+    <a class="{% if filter == 'all' %}is-active{% endif %}" 
+        href="{% url 'events:event_list_filtered' 'all' %}">
+        All
+    </a>
+  </p>
+{% for x in tickets %}
+<a href="{% url "events:ticket_detail" x.pk %}" class="panel-block">
+    <span class="panel-icon">
+      <i class="fas fa-book" aria-hidden="true"></i>
+    </span>
+    {{x.event.name}}
+  </a>
+{% endfor %}
+    <div class='panel-block'>
+        {% include 'pagination.html' with page=page_obj %}
+    </div>
+</nav>
+{% endblock %}
+

@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>Capacity</td>
-            <td>{{ event.capacity }}</td>
+            <td>{{ event.capacity_actual }} of {{ event.capacity }}</td>
         </tr>
     </table>
     {% else %}
@@ -53,7 +53,6 @@
         Delete
     </a>
     {% else %}
-        Ticket: {{ ticket }}
         {% if not ticket.active %}
         <form method='POST'>
             {% csrf_token %}
@@ -64,8 +63,12 @@
             <button type='submit' class='button is-dark'>Attend</button>
         </form>
         {% else %}
+            <div class="block">
+            Your ticket is:
+            </div>
+            <div>
             {% qr_from_text ticket size="T" image_format="png" error_correction="M" %}
-            You already have a ticket
+            </div>
         {% endif%}
     {% endif %}
 {% endblock %}

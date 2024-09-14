@@ -33,6 +33,14 @@ class Event(models.Model):
     capacity = models.IntegerField(default=50)
     capacity_actual = models.IntegerField(default=0)
     capacity_updated = models.BooleanField(default=False)
+    country = models.ForeignKey('cities_light.Country',
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                blank=True)
+    city = models.ForeignKey('cities_light.City',
+                             on_delete=models.SET_NULL,
+                             null=True,
+                             blank=True)
 
     class Meta:
         ordering = ("event_date",)

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import (
     UserCreationForm,
     UsernameField,
 )
+from cities_light.models import City
 
 
 User = get_user_model()
@@ -34,9 +35,25 @@ class EventModelForm(forms.ModelForm):
             "periodicity",
             "status",
             "capacity",
+            "country",
+            "city",
         )
-        widgets = {"event_date": DateTimeLocalInput(format="%Y-%m-%dT%H:%M")}
+        widgets = {
+            "event_date": DateTimeLocalInput(format="%Y-%m-%dT%H:%M"),
+            "country": forms.Select(attrs={"hx-get": "/events/load_cities/",
+                                     "hx-target":"#id_city"})
+        }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['city'].queryset = City.objects.none()
+
+        if "country" in self.data:
+            country_id = int(self.data.get("country"))
+            self.fields["city"].queryset = City.objects.filter(
+                    country_id=country_id
+            )
 
 class CustomUserCreationForm(UserCreationForm):
     usable_password = None

@@ -11,6 +11,7 @@ from .views import (
     TicketListView,
     TicketDetailView,
 )
+from . import views
 
 app_name = "events"
 
@@ -20,6 +21,7 @@ urlpatterns = [
     path("<int:pk>/", EventDetailView.as_view(), name="event_detail"),
     path("tickets/", TicketListView.as_view(), name="ticket_list"),
     path("tickets/<int:pk>/", TicketDetailView.as_view(), name="ticket_detail"),
+    path("load_cities/", views.load_cities, name="load_cities"),
     path(
         "public/",
         login_not_required(EventPublicListView.as_view()),

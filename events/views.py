@@ -1,4 +1,4 @@
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render
 from django.views import generic
 from django.urls import reverse_lazy
 from .models import Event, Ticket
@@ -7,7 +7,7 @@ from django.conf import settings
 import hashlib
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-
+from cities_light.models import City
 
 class LandingPageView(generic.TemplateView):
     template_name = "events/landing.html"
@@ -133,7 +133,6 @@ class EventCreateView(generic.CreateView):
     def form_valid(self, form):
         event = form.save(commit=False)
         event.creator = self.request.user
-        # event.capacity_actual = 0
         event.save()
         return super(EventCreateView, self).form_valid(form)
 
@@ -185,3 +184,10 @@ class TicketDetailView(generic.DetailView):
     model = Ticket
     context_object_name = "ticket"
     template_name = "events/ticket_detail.html"
+
+# test url
+# http://127.0.0.1:8000/events/load_cities/?country=35
+def load_cities(request):
+    country_id = request.GET.get("country")
+    cities = City.objects.filter(country_id=country_id)
+    return render(request, "events/city_options.html", {"cities": cities})

@@ -28,6 +28,14 @@
             <td>Capacity</td>
             <td>{{ event.capacity_actual }} of {{ event.capacity }}</td>
         </tr>
+        <tr>
+            <td>Country</td>
+            <td>{{ event.country }}</td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>{{ event.city }}</td>
+        </tr>
     </table>
     {% else %}
     <table class="table">
@@ -42,6 +50,14 @@
         <tr>
             <td>Event date</td>
             <td>{{ event.event_date }}</td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td>{{ event.country }}</td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>{{ event.city }}</td>
         </tr>
     </table>
     {% endif %}

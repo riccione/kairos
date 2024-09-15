@@ -40,20 +40,33 @@ class EventModelForm(forms.ModelForm):
         )
         widgets = {
             "event_date": DateTimeLocalInput(format="%Y-%m-%dT%H:%M"),
-            "country": forms.Select(attrs={"hx-get": "/events/load_cities/",
-                                     "hx-target":"#id_city"})
+            "country": forms.Select(attrs={
+                "hx-get": "/events/load_cities/",
+                "hx-target":"#id_city"})
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['city'].queryset = City.objects.none()
-
-        if "country" in self.data:
-            country_id = int(self.data.get("country"))
-            self.fields["city"].queryset = City.objects.filter(
-                    country_id=country_id
+        # for UpdateView, ?self.instance.pk
+        if self.instance:
+            country_id = self.instance.country
+            self.fields['city'].queryset = City.objects.filter(
+                country_id=country_id
             )
+        else:
+            self.fields['city'].queryset = City.objects.none()
+
+        # for CreateView
+        if "country" in self.data:
+            try:
+                country_id = int(self.data.get("country"))
+                self.fields["city"].queryset = City.objects.filter(
+                        country_id=country_id
+                )
+            except (ValueError, TypeError):
+                self.fields['city'].queryset = City.objects.none()
+
 
 class CustomUserCreationForm(UserCreationForm):
     usable_password = None

@@ -146,7 +146,7 @@ class EventUpdateView(generic.UpdateView):
     def form_valid(self, form):
         event = form.save(commit=False)
         new_capacity = form.cleaned_data.get('capacity')
-        print(event.capacity_updated, event.capacity_actual, new_capacity)
+        # print(event.capacity_updated, event.capacity_actual, new_capacity)
         if event.capacity_updated and event.capacity_actual > new_capacity:
             print(event.capacity_updated, event.capacity_actual, new_capacity)
             messages.error(

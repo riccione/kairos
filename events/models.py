@@ -1,6 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
+
+
+def validate_date(x):
+    if x < timezone.now().date():
+        raise ValidationError("Date cannot be in the past")
 
 
 class User(AbstractUser):
@@ -22,7 +28,8 @@ class Event(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="event")
-    event_date = models.DateTimeField()
+    event_date = models.DateField(validators=[validate_date])
+    event_time = models.TimeField()
     published = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -47,7 +54,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="ticket")

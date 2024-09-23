@@ -32,6 +32,7 @@ class EventModelForm(forms.ModelForm):
             "name",
             "description",
             "event_date",
+            "event_time",
             "periodicity",
             "status",
             "capacity",
@@ -39,7 +40,14 @@ class EventModelForm(forms.ModelForm):
             "city",
         )
         widgets = {
-            "event_date": DateTimeLocalInput(format="%Y-%m-%dT%H:%M"),
+            #"event_date": DateTimeLocalInput(format="%Y-%m-%d"),
+            "event_date": forms.DateInput(
+                format="%Y-%m-%d",
+                attrs={'type': 'date'}),
+            #"event_time": DateTimeLocalInput(format="%H:%M"),
+            "event_time": forms.TimeInput(
+                format="%H:%M",
+                attrs={'type': 'time'}),
             "country": forms.Select(attrs={
                 "hx-get": "/events/load_cities/",
                 "hx-target":"#id_city"})
